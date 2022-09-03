@@ -1,0 +1,28 @@
+{% extends "account/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} {% if title %} {{title}} {% endif %} {% endblock title %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column is-three-fifths is-offset-one-fifth">
+            <div class="card">
+                <h1 class="title p-5 has-text-centered">Registration</h1>
+                <form class="p-5" method="POST" action="/account/register">
+                    <fieldset>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="button is-primary" style="margin:auto;">Submit</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
+
+{% block postBody%}
+<script type="text/javascript">
+
+</script>
+{% endblock postBody%}

@@ -1,0 +1,24 @@
+{% extends "account/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} {% if title %} {{title}} {% else %} Profile {% endif %} {% endblock title %}
+
+{% block content %}
+
+<div class="columns">
+    <div class="column is-three-fifths is-offset-one-fifth">
+        <div class="card">
+            <div class="media-content p-5">
+                <p class="menu-label">{{ user.type }}</p>
+                <p class="title is-4">{{request.user.name}}</p>
+                <p class="subtitle is-6"> @{{request.user.username}} | {{request.user.email}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock content %}
+
+{% block postBody%}
+
+{% endblock postBody%}

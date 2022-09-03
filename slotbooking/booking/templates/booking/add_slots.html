@@ -1,0 +1,119 @@
+{% extends "account/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} {% if title %} {{title}} {% else %} Add Slots {% endif %} {% endblock title %}
+
+{% block content %}
+    <div class="column is_fullwidth">
+        <section class="hero is-dark">
+            <div class="hero-body">
+                <p class="title">Edit Slots</p>
+                <p class="subtitle">
+                    {{sport_name}} > {{space_name}}
+                </p>
+            </div>
+        </section>
+        <div class="box">
+            <div class="date-input has-text-centered" >
+                <label for="" class="label">Select Date</label>
+                <input type="date" class="input" id="date-input" data-date-inline-picker="true"/>
+            </div>
+
+            <!-- <hr class="navbar-divider"> -->
+
+            <div class="section" >
+                <table class="table has-text-centered is-striped is-hoverable" style="margin:auto;">
+                    <thead>
+                        <tr>
+                            <td>Time</td>
+                            <td>Available</td>
+                            <td>Modify</td>
+                        </tr>
+                    </thead>
+                    <tbody class="slots">
+                        <!-- <tr class="slot">
+                            <td>
+                                <span class="start_time">6:00 PM</span>
+                                <span>-</span>
+                                <span class="end_time">7:00 PM</span>
+                            </td>
+                            <td>
+                                <span class="available_no">2</span>
+                                <span> / </span>
+                                <span class="total_no">3</span>
+                            </td>
+                            <td>
+                                <button class="button is-danger  delete_slot">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block postBody%}
+<script type="text/javascript">
+    var space_id = parseInt("{{space_id}}");
+    console.log("Hllo");
+    $("#date-input").change((e) => {
+       var date = new Date($("#date-input").val());
+       var dateS = date.toLocaleDateString();
+       console.log(date.toLocaleDateString());
+       getSlots(dateS);
+    })
+    function getSlots(date_str){
+        var data = {};
+        // data['hello'] = "hello";
+        // console.log(date_str);
+        data['date'] = date_str;
+        data['space_id'] = space_id;
+        fetch("{% url 'get-slots' %}", {
+            method:"POST", 
+            body: JSON.stringify(data)
+        }).then(response => {
+            if(response.status == 200){
+                response.json().then(data => {
+                    displaySlots(data);
+                })
+            }
+            else{
+                show_error("Something went wrong. Please try again.");
+            }
+            
+        })
+    }
+    function displaySlots(data){
+        var slot_html = `<tr class="slot">
+                            <td>
+                                <span class="start_time"></span>
+                                <span>-</span>
+                                <span class="end_time"></span>
+                            </td>
+                            <td>
+                                <span class="booked_no"></span>
+                                <span> / </span>
+                                <span class="total_no"></span>
+                            </td>
+                            <td>
+                                <button class="button is-danger  delete_slot">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>`
+        for(d of data){
+            var slotElement = $(slot_html);
+            console.log(d, slotElement);
+            slotElement.attr("avail_id", d['avail_id']);
+            slotElement.find(".start_time").text(d.slot_start_time);
+            slotElement.find(".end_time").text(d.slot_end_time);
+            slotElement.find(".available_no").text(d.units_available);
+            slotElement.find(".total_no").text(d.total_units);
+            $(".slots").append(slotElement);
+        }
+    }
+</script>
+{% endblock postBody%}

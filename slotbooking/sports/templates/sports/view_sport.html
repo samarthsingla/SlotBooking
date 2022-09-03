@@ -1,0 +1,55 @@
+{% extends "account/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} {% if title %} {{title}} {% else %} View {% endif %} {% endblock title %}
+
+{% block content %}
+    <div class="column is-fullwidths">
+        <section class="hero is-dark">
+            <div class="hero-body">
+              <p class="title">
+                {{ sport_name }}
+              </p>
+              <p class="subtitle">
+                
+              </p>
+            </div>
+          </section>
+        <div class="box">
+            <section class="section" name="spaces">
+                <p class="title has-text-weight-semibold">
+                    <!-- <span class="icon"><i class="fa-solid fa-people-group"></i></span> -->
+                    Spaces
+                </p>
+                <table class="table is-striped is-hoverable">
+                    <thead>
+                        <th>S.No.</th>
+                        <th>Name</th>
+                        <th>Total Units</th>
+                        <th>Booking</th>
+                    </thead>
+                    <tbody>
+                        {% for space in spaces %}
+                            <tr>
+                                <th class="has-text-centered">{{space.srno}}</th>
+                                <td class="space_name">{{space.space_name}}</td>
+                                <td class="has-text-centered">{{space.total_units}}</td>
+                                <td><a class="" href="book/{{space.space_id}}">Check Availability</a></td>
+                                {% if user.type == "staff" %}
+                                    <td><a href="/booking/editSlots/{{space.space_id}}" class="button">Edit Slots</a></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block postBody%}
+<script type="text/javascript">
+
+</script>
+{% endblock postBody%}

@@ -1,0 +1,145 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  -->
+
+    <title> {% block title %} {% endblock %} </title>
+    <!--  -->
+    <!-- <link href="https://unpkg.com/bonsai.css@latest/dist/bonsai.min.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"> -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/282613ff9e.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.6/js/standalone/selectize.min.js" integrity="sha512-pgmLgtHvorzxpKra2mmibwH/RDAVMlOuqU98ZjnyZrOZxgAR8hwL8A02hQFWEK25V40/9yPYb/Zc+kyWMplgaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.6/css/selectize.css" integrity="sha512-6skR4yyaANUKXypVS+nB+HMmq8Xd17CSwFsBEHCRaa3UicPlksbwVtBTZl13Fea6zqsnnmqc7fRH97/M6JcwCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        button span{
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar mb-4 is-light has-shadow" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> -->
+                <!-- <img src="https://www.freepik.com/free-photos-vectors/noodle" width="112" height="28"> -->
+                <p class="title">Mittl</p>
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        
+                        {% if request.user.is_authenticated %}
+                        
+                        <!-- <a class="button is-ghost" href="{% url 'account-profile' %}">
+                            Hello, {{request.user.name.split|first}}
+                        </a>
+                        <a class="button is-primary" href="{% url 'account-logout' %}">
+                            <strong>Logout</strong>
+                        </a> -->
+
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link">
+                                <span class="icon"><i class="fa-regular fa-user"></i></span>
+                                <span>{{request.user.name.split|first}}</span>
+                                
+                            </a>
+        
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item" href="{% url 'account-profile' %}" >
+                                    <span class="icon"><i class="fa-regular fa-address-card"></i></span>
+                                    <span>Profile</span>
+                                    
+                                </a>
+                                <hr class="navbar-divider">
+                                <a class="navbar-item" href="{% url 'account-logout' %}" >
+                                    <span class="icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                        </div>
+                        {% else %}
+
+                        <a class="button is-primary" href="{% url 'account-register' %}">
+                            <strong>Sign up</strong>
+                        </a>
+                        <a class="button is-light" href="{% url 'account-login' %}">
+                            Log in
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="notifications" style="position:absolute; width:100%;z-index:1000;">
+        {% for message in messages%}
+        <div class="notification {% if message.tags != 'info' %} is-{{ message.tags }} {% endif %}">
+            <button class="delete"></button>
+            {{ message }}
+        </div>
+        <!-- <div class="notification is-danger">
+            <button class="delete">
+                <p class="message"></p>
+            </button>
+        </div> -->
+    {% endfor %}
+    </div>
+
+    <div class="container">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+<script type="text/javascript">
+    var error_noti = `
+                        <div class="notification is-danger" style="padding: 1vh;" >
+                            <button class="delete">
+                            </button>
+                            
+                        </div>
+                    `
+
+    function delNoti(e){
+        e.target.parentElement.remove();
+    }
+    buttons = document.getElementsByClassName("delete");
+    for(var btn of buttons){
+        btn.addEventListener("click", delNoti);
+    }
+    function show_error(msg){
+        var newErr = $(error_noti);
+        console.log(msg);
+        newErr.append(msg)
+        newErr.find(".delete").click(delNoti);
+        $(".notifications").append(newErr);
+    }
+</script>
+{% block postBody%} 
+
+{% endblock postBody%}
+
+</html>
