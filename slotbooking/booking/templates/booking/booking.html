@@ -1,7 +1,7 @@
 {% extends "account/base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %} {% if title %} {{title}} {% else %} Add Slots {% endif %} {% endblock title %}
+{% block title %} {% if title %} {{title}} {% else %} Book Slots {% endif %} {% endblock title %}
 
 {% block content %}
     <div class="column is_fullwidth">
@@ -117,9 +117,12 @@
             slotElement.find(".available_no").text(d.units_available);
             slotElement.find(".total_no").text(d.total_units);
             slotElement.find(".request_slot").click((e) => {
-                var reason = prompt("All the bookings for this slot would be cancelled. Reason for cancellation (optional): ");
+                // if(!alert("Send request to book this slot?")){
+                //     return;
+                // }
+                console.log("helo");
                 var el = $(e.target).parents(".slot");
-                data = JSON.stringify({'avail_id':el.attr("avail_id"), 'reason':reason});
+                data = JSON.stringify({'avail_id':el.attr("avail_id")});
                 // console.log(data);
                 fetch("{% url 'add_request' %}", {
                     method:"POST", 
@@ -127,9 +130,18 @@
                 }).then(response => {
                     if(response.status == 200){
                         getSlots(fetchDate());
+                        show_success("Request Sent! Check your profile for your bookings!");
                     }
                     else{
-                        show_error("An error occurred while deleting the slot")
+                        if(response.status == 102){
+                            show_error("Slots are full. Sorry!");
+                        }
+                        else if(response.status == 101){
+                            show_error("You have already booked your slot limit for today.");
+                        }
+                        else{
+                            show_error("Something went wrong. Please try again.");
+                        }
                     }
                 })
             })

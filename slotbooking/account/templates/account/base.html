@@ -125,7 +125,13 @@
                             
                         </div>
                     `
-
+    var success_noti = `
+                        <div class="notification is-success" style="padding: 1vh;" >
+                            <button class="delete">
+                            </button>
+                            
+                        </div>
+                    `
     function delNoti(e){
         e.target.parentElement.remove();
     }
@@ -135,6 +141,13 @@
     }
     function show_error(msg){
         var newErr = $(error_noti);
+        console.log(msg);
+        newErr.append(msg)
+        newErr.find(".delete").click(delNoti);
+        $(".notifications").append(newErr);
+    }
+    function show_success(msg){
+        var newErr = $(success_noti);
         console.log(msg);
         newErr.append(msg)
         newErr.find(".delete").click(delNoti);

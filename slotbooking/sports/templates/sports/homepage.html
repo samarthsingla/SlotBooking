@@ -4,21 +4,26 @@
 {% block title %} {% if title %} {{title}} {% else %} {% endif %} {% endblock title %}
 
 {% block content %}
-<div class="column is-four-fifths">
+<div class="column">
     <section class="hero is-dark">
         <div class="hero-body has-text-centered">
             <p class="title">Welcome to Mittal Sports Complex!</p>
             <p class="subtitle">Pick your sport and start booking!</p>
         </div>
     </section>
-    <div class="tile is-ancestor section">
+    <div class="section">
         {% for sport in sports %}
-            <div class="tile box m-2">
+            <div class="card box m-2">
                 <p class="title"> {{sport.sport_name}} </p>
-                <hr class="navbar-divider">
-                <a class="button" href="/sport/{{sport.id}}"> View </a>
+                <!-- <hr class="navbar-divider"> -->
+                <div class="card-footer">
+                    <a class="card-footer-item" href="/sport/{{sport.id}}">
+                        <span>View Spaces</span>
+                    </a>
+                </div>
             </div>
         {% endfor %}
+        
     </div>
 </div>
 

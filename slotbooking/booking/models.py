@@ -28,6 +28,9 @@ class Availability(models.Model):
     units_available = models.IntegerField(default=1)
     class Meta:
         unique_together = [['space', 'slot', 'date']]
+    
+    def __str__(self):
+        return self.space.name + " " +  self.slot.start_time.strftime("%-I:%M %p") + " to " + self.slot.end_time.strftime("%-I:%M %p")
 
 
 class Request(models.Model):
@@ -36,6 +39,8 @@ class Request(models.Model):
 class Booking(models.Model):    
     availability = models.ForeignKey(to=Availability, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE, default=Account.objects.filter(type = "admin").first())
+    approved = models.BooleanField(default=False)
+
     # slotInfoObj = models.ForeignKey(SlotInfo, on_delete=models.CASCADE, null=True)
 
 
