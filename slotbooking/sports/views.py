@@ -17,6 +17,12 @@ def view_sport(request, sport_id):
     print(spaces)
     return render(request, "sports/view_sport.html", {'sport_name':sport.sport_name, 'spaces':spaces})
 
+def home(request):
+    user = request.user
+    if request.method == "GET":    
+        sports = Sport.objects.all()
+        return render(request, 'sports/homepage.html', {'sports': sports})
+
 def booking(request, sport_id, space_id):
     pass
 

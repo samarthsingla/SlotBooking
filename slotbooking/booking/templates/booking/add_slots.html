@@ -59,11 +59,13 @@
 <script type="text/javascript">
     var space_id = parseInt("{{space_id}}");
     console.log("Hllo");
+    function fetchDate(){
+        var date = new Date($("#date-input").val());
+        var dateS = date.toLocaleDateString();
+        return dateS;
+    }
     $("#date-input").change((e) => {
-       var date = new Date($("#date-input").val());
-       var dateS = date.toLocaleDateString();
-       console.log(date.toLocaleDateString());
-       getSlots(dateS);
+       getSlots(fetchDate());
     })
     function getSlots(date_str){
         var data = {};
@@ -104,14 +106,33 @@
                                 </button>
                             </td>
                         </tr>`
+
+         $(".slots").empty();
         for(d of data){
             var slotElement = $(slot_html);
             console.log(d, slotElement);
             slotElement.attr("avail_id", d['avail_id']);
             slotElement.find(".start_time").text(d.slot_start_time);
             slotElement.find(".end_time").text(d.slot_end_time);
-            slotElement.find(".available_no").text(d.units_available);
+            slotElement.find(".booked_no").text(d.units_available);
             slotElement.find(".total_no").text(d.total_units);
+            slotElement.find(".delete_slot").click((e) => {
+                var reason = prompt("All the bookings for this slot would be cancelled. Reason for cancellation (optional): ");
+                var el = $(e.target).parents(".slot");
+                data = JSON.stringify({'avail_id':el.attr("avail_id"), 'reason':reason});
+                // console.log(data);
+                fetch("{% url 'delete_slot' %}", {
+                    method:"POST", 
+                    body: data
+                }).then(response => {
+                    if(response.status == 200){
+                        getSlots(fetchDate());
+                    }
+                    else{
+                        show_error("An error occurred while deleting the slot")
+                    }
+                })
+            })
             $(".slots").append(slotElement);
         }
     }

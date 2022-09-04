@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'account',
     'sports',
     'booking',
+    'communication',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

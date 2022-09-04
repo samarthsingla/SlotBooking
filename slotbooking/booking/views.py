@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from account import utils
@@ -46,4 +46,17 @@ def get_slots(request):
             print(ret)
             return JsonResponse(ret, safe=False)
 
+@csrf_exempt
+def delete_slot(request):
+    user = request.user
+    if user.is_authenticated and user.type in ['staff']:
+        if request.method == "POST":
+            data = json.loads(request.body)
+            avail_id = data['avail_id']
+            cancel_reason = data['reason']
+            availobj = Availability.objects.get(id=avail_id)
+            availobj.delete()
+            return HttpResponse()
+    else:
+        return utils.error1(request, "You need to be logged in as a staff account.")
 

@@ -1,7 +1,7 @@
 from django.db import models
 from sports.models import Sport
 import datetime
-
+from account.models import Account
 
 class Slot(models.Model):
     start_time = models.TimeField()
@@ -35,4 +35,7 @@ class Request(models.Model):
 
 class Booking(models.Model):    
     availability = models.ForeignKey(to=Availability, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, default=Account.objects.filter(type = "admin").first())
     # slotInfoObj = models.ForeignKey(SlotInfo, on_delete=models.CASCADE, null=True)
+
+
