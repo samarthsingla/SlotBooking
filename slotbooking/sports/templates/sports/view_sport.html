@@ -34,7 +34,7 @@
                                 <th class="has-text-centered">{{space.srno}}</th>
                                 <td class="space_name">{{space.space_name}}</td>
                                 <td class="has-text-centered">{{space.total_units}}</td>
-                                <td><a class="" href="book/{{space.space_id}}">Check Availability</a></td>
+                                <td><a class="" href="/booking/{{space.space_id}}">Check Availability</a></td>
                                 {% if user.type == "staff" %}
                                     <td><a href="/booking/editSlots/{{space.space_id}}" class="button">Edit Slots</a></td>
                                 {% endif %}

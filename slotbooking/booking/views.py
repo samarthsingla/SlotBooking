@@ -32,7 +32,7 @@ def get_slots(request):
             data = json.loads(request.body)
             date = datetime.strptime(data['date'], "%d/%m/%Y")
             print(date.date())
-            avails = Availability.objects.filter(date=date.date(), space_id = data['space_id'])
+            avails = Availability.objects.filter(date=date.date(), space_id = data['space_id']).order_by('slot__start_time')
             ret  = []
             for avail in avails:
                 avail_obj = {}
@@ -60,3 +60,31 @@ def delete_slot(request):
     else:
         return utils.error1(request, "You need to be logged in as a staff account.")
 
+@csrf_exempt
+def add_slot(request):
+    user = request.user
+    if user.is_authenticated and user.type in ['staff']:
+        pass
+    else:
+        return utils.error1(request, "You need to be logged in as a staff account.")
+
+def add_request(request):
+    user = request.user
+    if user.is_authenticated and user.type in ['student'] :
+        data = json.loads(request.body)
+        avail_id = data['avail_id']
+
+def booking(request, space_id):
+    user = request.user
+    if user.is_authenticated and user.type in ['student']:
+        if request.method == "POST":
+            pass
+        else:
+            space = Space.objects.get(id = space_id)
+            context = {}
+            context['space_name'] = space.name
+            context['space_id'] = space.id
+            context['sport_name'] = space.assoc_sport.sport_name
+            return render(request, "booking/booking.html", context)
+    else:
+        return utils.error1(request, "Only available for students.")

@@ -15,6 +15,7 @@
         {% for sport in sports %}
             <div class="tile box m-2">
                 <p class="title"> {{sport.sport_name}} </p>
+                <hr class="navbar-divider">
                 <a class="button" href="/sport/{{sport.id}}"> View </a>
             </div>
         {% endfor %}

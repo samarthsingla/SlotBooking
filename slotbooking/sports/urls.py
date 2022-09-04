@@ -6,5 +6,4 @@ from . import views
 
 urlpatterns = [
     path("<int:sport_id>/", views.view_sport, name="sports-view_sport"),
-    path("<int:sport_id>/book/<int:space_id>/", views.booking)
 ]

@@ -9,17 +9,15 @@ class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(label='Email', required=True)
     name = forms.CharField(label='Full Name', required=True)
     # is_instructor = forms.BooleanField(label="Instructor Account", required=False, help_text='Check the box if you are an instructor')
-    account_type = forms.ChoiceField(label="Register As", choices=Account.TYPE_CHOICES)
+    # account_type = forms.ChoiceField(label="Register As", choices=Account.TYPE_CHOICES)
     
     class Meta:
         model = Account
-        fields = ['username', 'name', 'email','type','password1', 'password2', 'account_type']
+        fields = ['username', 'name', 'email','type','password1', 'password2']
     # field_order = []
 
     def clean(self):
         cleaned = self.cleaned_data
-        if cleaned['account_type'] == "student":
-            pass    
 
 
 class AccountAuthenticationForm(forms.ModelForm):

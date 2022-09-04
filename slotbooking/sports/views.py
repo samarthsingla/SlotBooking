@@ -23,6 +23,4 @@ def home(request):
         sports = Sport.objects.all()
         return render(request, 'sports/homepage.html', {'sports': sports})
 
-def booking(request, sport_id, space_id):
-    pass
 
